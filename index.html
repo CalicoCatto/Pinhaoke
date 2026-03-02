@@ -516,10 +516,22 @@ body::after {
           </button>
         </div>
       </div>
-      <button class="top-btn" onclick="toggleLang()">
-        <span class="icon">&#x1F310;</span>
-        <span id="langLabel">EN</span>
-      </button>
+      <div class="font-selector" id="langSelector">
+        <button class="top-btn" onclick="toggleLangDropdown()">
+          <span class="icon">&#x1F310;</span>
+          <span id="langLabel">中文</span>
+        </button>
+        <div class="font-dropdown" id="langDropdown">
+          <button class="font-option active" data-lang="zh" onclick="setLang('zh')"><span class="font-name">中文</span></button>
+          <button class="font-option" data-lang="en" onclick="setLang('en')"><span class="font-name">English</span></button>
+          <button class="font-option" data-lang="ja" onclick="setLang('ja')"><span class="font-name">日本語</span></button>
+          <button class="font-option" data-lang="ko" onclick="setLang('ko')"><span class="font-name">한국어</span></button>
+          <button class="font-option" data-lang="fr" onclick="setLang('fr')"><span class="font-name">Fran&ccedil;ais</span></button>
+          <button class="font-option" data-lang="de" onclick="setLang('de')"><span class="font-name">Deutsch</span></button>
+          <button class="font-option" data-lang="es" onclick="setLang('es')"><span class="font-name">Espa&ntilde;ol</span></button>
+          <button class="font-option" data-lang="ru" onclick="setLang('ru')"><span class="font-name">Русский</span></button>
+        </div>
+      </div>
     </div>
     <h1 id="title">北京大学 2026春季课程搜索</h1>
     <p class="subtitle" id="subtitle">搜索本科生与研究生课程</p>
@@ -598,6 +610,7 @@ body::after {
 /* ===== i18n ===== */
 const i18n = {
   zh: {
+    name: '中文',
     title: '北京大学 2026春季课程搜索',
     subtitle: '搜索本科生与研究生课程',
     searchPlaceholder: '输入课程名或教师姓名...',
@@ -611,44 +624,138 @@ const i18n = {
     loadMoreText: '加载更多',
     loadingText: '正在加载课程数据...',
     emptyText: '未找到匹配的课程',
-    resultsCount: (shown, total) => `显示 ${shown} / ${total} 门课程`,
-    langLabel: 'EN',
-    all: '全部',
-    undergrad: '本科生',
-    grad: '研究生',
-    weekdays: ['周一', '周二', '周三', '周四', '周五', '周六', '周日'],
-    fieldTeacher: '教师',
-    fieldDepartment: '开课单位',
-    fieldTime: '上课时间',
-    fieldClassroom: '教室',
-    fieldNotes: '备注',
+    resultsCount: (s, t) => `显示 ${s} / ${t} 门课程`,
+    all: '全部', undergrad: '本科生', grad: '研究生',
+    weekdays: ['周一','周二','周三','周四','周五','周六','周日'],
+    fieldTeacher: '教师', fieldDepartment: '开课单位',
+    fieldTime: '上课时间', fieldClassroom: '教室', fieldNotes: '备注',
   },
   en: {
+    name: 'English',
     title: 'PKU Spring 2026 Course Search',
     subtitle: 'Search undergraduate and graduate courses',
     searchPlaceholder: 'Search course name or teacher...',
-    labelStudentType: 'Student Type',
-    labelCategory: 'Category',
-    labelDepartment: 'Department',
-    labelWeekday: 'Schedule',
+    labelStudentType: 'Student Type', labelCategory: 'Category',
+    labelDepartment: 'Department', labelWeekday: 'Schedule',
     labelClassroom: 'Classroom',
     classroomPlaceholder: 'Enter classroom name...',
-    clearBtn: 'Clear Filters',
-    loadMoreText: 'Load More',
+    clearBtn: 'Clear Filters', loadMoreText: 'Load More',
     loadingText: 'Loading course data...',
     emptyText: 'No matching courses found',
-    resultsCount: (shown, total) => `Showing ${shown} / ${total} courses`,
-    langLabel: '中文',
-    all: 'All',
-    undergrad: 'Undergraduate',
-    grad: 'Graduate',
-    weekdays: ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'],
-    fieldTeacher: 'Teacher',
-    fieldDepartment: 'Dept.',
-    fieldTime: 'Schedule',
-    fieldClassroom: 'Room',
-    fieldNotes: 'Notes',
-  }
+    resultsCount: (s, t) => `Showing ${s} / ${t} courses`,
+    all: 'All', undergrad: 'Undergraduate', grad: 'Graduate',
+    weekdays: ['Mon','Tue','Wed','Thu','Fri','Sat','Sun'],
+    fieldTeacher: 'Teacher', fieldDepartment: 'Dept.',
+    fieldTime: 'Schedule', fieldClassroom: 'Room', fieldNotes: 'Notes',
+  },
+  ja: {
+    name: '日本語',
+    title: '北京大学 2026年春学期 授業検索',
+    subtitle: '学部・大学院の全授業を検索',
+    searchPlaceholder: '授業名または教員名を入力...',
+    labelStudentType: '学生区分', labelCategory: '科目区分',
+    labelDepartment: '開講部局', labelWeekday: '曜日',
+    labelClassroom: '教室',
+    classroomPlaceholder: '教室名を入力...',
+    clearBtn: 'クリア', loadMoreText: 'もっと見る',
+    loadingText: 'データを読み込み中...',
+    emptyText: '該当する授業が見つかりません',
+    resultsCount: (s, t) => `${t} 件中 ${s} 件表示`,
+    all: 'すべて', undergrad: '学部', grad: '大学院',
+    weekdays: ['月','火','水','木','金','土','日'],
+    fieldTeacher: '教員', fieldDepartment: '開講部局',
+    fieldTime: '時間割', fieldClassroom: '教室', fieldNotes: '備考',
+  },
+  ko: {
+    name: '한국어',
+    title: '베이징대학교 2026 봄학기 강좌 검색',
+    subtitle: '학부 및 대학원 전체 강좌 검색',
+    searchPlaceholder: '강좌명 또는 교수명 입력...',
+    labelStudentType: '학생 유형', labelCategory: '강좌 분류',
+    labelDepartment: '개설 학과', labelWeekday: '요일',
+    labelClassroom: '강의실',
+    classroomPlaceholder: '강의실명 입력...',
+    clearBtn: '초기화', loadMoreText: '더 보기',
+    loadingText: '데이터 로딩 중...',
+    emptyText: '일치하는 강좌가 없습니다',
+    resultsCount: (s, t) => `${t}개 중 ${s}개 표시`,
+    all: '전체', undergrad: '학부', grad: '대학원',
+    weekdays: ['월','화','수','목','금','토','일'],
+    fieldTeacher: '교수', fieldDepartment: '개설 학과',
+    fieldTime: '시간', fieldClassroom: '강의실', fieldNotes: '비고',
+  },
+  fr: {
+    name: 'Français',
+    title: 'Recherche de cours PKU - Printemps 2026',
+    subtitle: 'Rechercher les cours de licence et de master',
+    searchPlaceholder: 'Nom du cours ou de l\'enseignant...',
+    labelStudentType: 'Niveau', labelCategory: 'Catégorie',
+    labelDepartment: 'Département', labelWeekday: 'Jour',
+    labelClassroom: 'Salle',
+    classroomPlaceholder: 'Nom de la salle...',
+    clearBtn: 'Réinitialiser', loadMoreText: 'Voir plus',
+    loadingText: 'Chargement des données...',
+    emptyText: 'Aucun cours trouvé',
+    resultsCount: (s, t) => `${s} / ${t} cours affichés`,
+    all: 'Tous', undergrad: 'Licence', grad: 'Master',
+    weekdays: ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'],
+    fieldTeacher: 'Enseignant', fieldDepartment: 'Dépt.',
+    fieldTime: 'Horaire', fieldClassroom: 'Salle', fieldNotes: 'Notes',
+  },
+  de: {
+    name: 'Deutsch',
+    title: 'PKU Kurssuche - Frühling 2026',
+    subtitle: 'Bachelor- und Masterkurse durchsuchen',
+    searchPlaceholder: 'Kursname oder Dozent...',
+    labelStudentType: 'Studiengang', labelCategory: 'Kategorie',
+    labelDepartment: 'Fakultät', labelWeekday: 'Wochentag',
+    labelClassroom: 'Raum',
+    classroomPlaceholder: 'Raumname eingeben...',
+    clearBtn: 'Zurücksetzen', loadMoreText: 'Mehr laden',
+    loadingText: 'Daten werden geladen...',
+    emptyText: 'Keine passenden Kurse gefunden',
+    resultsCount: (s, t) => `${s} von ${t} Kursen angezeigt`,
+    all: 'Alle', undergrad: 'Bachelor', grad: 'Master',
+    weekdays: ['Mo','Di','Mi','Do','Fr','Sa','So'],
+    fieldTeacher: 'Dozent', fieldDepartment: 'Fakultät',
+    fieldTime: 'Zeit', fieldClassroom: 'Raum', fieldNotes: 'Hinweise',
+  },
+  es: {
+    name: 'Español',
+    title: 'Búsqueda de cursos PKU - Primavera 2026',
+    subtitle: 'Buscar cursos de grado y posgrado',
+    searchPlaceholder: 'Nombre del curso o profesor...',
+    labelStudentType: 'Nivel', labelCategory: 'Categoría',
+    labelDepartment: 'Departamento', labelWeekday: 'Día',
+    labelClassroom: 'Aula',
+    classroomPlaceholder: 'Nombre del aula...',
+    clearBtn: 'Limpiar', loadMoreText: 'Cargar más',
+    loadingText: 'Cargando datos...',
+    emptyText: 'No se encontraron cursos',
+    resultsCount: (s, t) => `Mostrando ${s} de ${t} cursos`,
+    all: 'Todos', undergrad: 'Grado', grad: 'Posgrado',
+    weekdays: ['Lun','Mar','Mié','Jue','Vie','Sáb','Dom'],
+    fieldTeacher: 'Profesor', fieldDepartment: 'Depto.',
+    fieldTime: 'Horario', fieldClassroom: 'Aula', fieldNotes: 'Notas',
+  },
+  ru: {
+    name: 'Русский',
+    title: 'Поиск курсов ПКУ - Весна 2026',
+    subtitle: 'Поиск курсов бакалавриата и магистратуры',
+    searchPlaceholder: 'Название курса или преподаватель...',
+    labelStudentType: 'Уровень', labelCategory: 'Категория',
+    labelDepartment: 'Факультет', labelWeekday: 'День',
+    labelClassroom: 'Аудитория',
+    classroomPlaceholder: 'Название аудитории...',
+    clearBtn: 'Сбросить', loadMoreText: 'Загрузить ещё',
+    loadingText: 'Загрузка данных...',
+    emptyText: 'Курсы не найдены',
+    resultsCount: (s, t) => `Показано ${s} из ${t} курсов`,
+    all: 'Все', undergrad: 'Бакалавриат', grad: 'Магистратура',
+    weekdays: ['Пн','Вт','Ср','Чт','Пт','Сб','Вс'],
+    fieldTeacher: 'Преподаватель', fieldDepartment: 'Факультет',
+    fieldTime: 'Расписание', fieldClassroom: 'Аудитория', fieldNotes: 'Примечания',
+  },
 };
 
 let currentLang = 'zh';
@@ -681,15 +788,28 @@ function closeFontDropdown() {
 }
 
 document.addEventListener('click', e => {
-  if (!document.getElementById('fontSelector').contains(e.target)) {
-    closeFontDropdown();
-  }
+  if (!document.getElementById('fontSelector').contains(e.target)) closeFontDropdown();
+  if (!document.getElementById('langSelector').contains(e.target)) closeLangDropdown();
 });
 
-function toggleLang() {
-  currentLang = currentLang === 'zh' ? 'en' : 'zh';
+/* ===== Language Selector ===== */
+function setLang(key) {
+  currentLang = key;
+  document.getElementById('langLabel').textContent = i18n[key].name;
+  document.querySelectorAll('#langDropdown .font-option').forEach(el => {
+    el.classList.toggle('active', el.dataset.lang === key);
+  });
+  closeLangDropdown();
   applyI18n();
   renderResults();
+}
+
+function toggleLangDropdown() {
+  document.getElementById('langDropdown').classList.toggle('open');
+}
+
+function closeLangDropdown() {
+  document.getElementById('langDropdown').classList.remove('open');
 }
 
 function applyI18n() {
