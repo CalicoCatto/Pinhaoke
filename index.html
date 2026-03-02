@@ -88,6 +88,33 @@ body::after {
   position: relative;
 }
 
+.github-star {
+  position: absolute;
+  top: 20px;
+  left: 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  text-decoration: none;
+  color: var(--text-light);
+  font-size: 0.75rem;
+  line-height: 1.4;
+  max-width: 200px;
+  transition: color 0.25s;
+}
+
+.github-star:hover { color: var(--text); }
+
+.github-star svg {
+  flex-shrink: 0;
+  width: 28px;
+  height: 28px;
+  fill: var(--text-light);
+  transition: fill 0.25s;
+}
+
+.github-star:hover svg { fill: var(--text); }
+
 .header h1 {
   font-size: 2.6rem;
   font-weight: 700;
@@ -477,7 +504,9 @@ body::after {
 /* ===== Responsive ===== */
 @media (max-width: 640px) {
   .container { padding: 16px 12px 40px; }
-  .header { padding: 30px 12px 20px; }
+  .header { padding: 70px 12px 20px; }
+  .github-star { top: 10px; left: 12px; font-size: 0.68rem; max-width: 150px; }
+  .github-star svg { width: 22px; height: 22px; }
   .header h1 { font-size: 2rem; }
   .top-controls { top: 10px; right: 12px; gap: 6px; }
   .top-btn { padding: 5px 10px; font-size: 0.74rem; }
@@ -495,6 +524,10 @@ body::after {
 <div class="container">
   <!-- Header -->
   <div class="header">
+    <a class="github-star" href="https://github.com/CalicoCatto/Pinhaoke" target="_blank" rel="noopener">
+      <svg viewBox="0 0 16 16" xmlns="http://www.w3.org/2000/svg"><path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27s1.36.09 2 .27c1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.01 8.01 0 0016 8c0-4.42-3.58-8-8-8z"/></svg>
+      <span id="githubText">去Github上给我的项目点个Star<br>就是对我最大的支持！感谢您！</span>
+    </a>
     <div class="top-controls">
       <div class="font-selector" id="fontSelector">
         <button class="top-btn" onclick="toggleFontDropdown()">
