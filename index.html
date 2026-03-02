@@ -5,7 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>北大课程搜索 | PKU Course Search</title>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<link rel="preconnect" href="https://fonts.googleapis.com" crossorigin>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://cdn.jsdelivr.net/npm/lxgw-wenkai-webfont@1.7.0/style.css" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;600;700&display=swap" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/harmonyos-sans-font@0.2.1/css/harmonyos-sans-sc.css" rel="stylesheet">
 <style>
 /* ===== Reset & Base ===== */
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -32,7 +36,7 @@
 }
 
 body {
-  font-family: "LXGW WenKai", -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", sans-serif;
+  font-family: "HarmonyOS Sans SC", -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif;
   color: var(--text);
   line-height: 1.6;
   min-height: 100vh;
@@ -102,15 +106,21 @@ body::after {
   font-weight: 400;
 }
 
-/* ===== Language Toggle ===== */
-.lang-toggle {
+/* ===== Top Controls (lang + font) ===== */
+.top-controls {
   position: absolute;
   top: 20px;
   right: 20px;
   display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.top-btn {
+  display: flex;
   align-items: center;
   gap: 6px;
-  padding: 7px 16px;
+  padding: 7px 14px;
   border-radius: var(--radius-pill);
   background: var(--glass-bg);
   backdrop-filter: blur(var(--blur));
@@ -118,21 +128,73 @@ body::after {
   border: 1px solid var(--glass-border);
   box-shadow: 0 4px 16px var(--glass-shadow);
   cursor: pointer;
-  font-size: 0.82rem;
+  font-size: 0.8rem;
   color: var(--text-light);
   font-family: inherit;
   transition: all 0.25s;
   user-select: none;
 }
 
-.lang-toggle:hover {
+.top-btn:hover {
   background: var(--glass-bg-strong);
   box-shadow: 0 6px 20px rgba(99, 102, 241, 0.15);
 }
 
-.lang-toggle:active { transform: scale(0.96); }
+.top-btn:active { transform: scale(0.96); }
 
-.lang-toggle .globe { font-size: 1rem; }
+.top-btn .icon { font-size: 0.95rem; }
+
+/* Font selector dropdown */
+.font-selector {
+  position: relative;
+}
+
+.font-dropdown {
+  display: none;
+  position: absolute;
+  top: calc(100% + 8px);
+  right: 0;
+  min-width: 200px;
+  padding: 6px 0;
+  border-radius: var(--radius-sm);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 12px 40px rgba(31, 38, 135, 0.18);
+  z-index: 100;
+}
+
+.font-dropdown.open { display: block; }
+
+.font-option {
+  display: block;
+  width: 100%;
+  padding: 9px 16px;
+  border: none;
+  background: none;
+  text-align: left;
+  font-size: 0.84rem;
+  color: var(--text);
+  cursor: pointer;
+  font-family: inherit;
+  transition: background 0.15s;
+}
+
+.font-option:hover { background: rgba(99, 102, 241, 0.08); }
+
+.font-option.active {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.font-option .font-name { display: block; }
+
+.font-option .font-desc {
+  font-size: 0.72rem;
+  color: var(--text-lighter);
+  margin-top: 1px;
+}
 
 /* ===== Search Bar ===== */
 .search-section {
@@ -417,7 +479,8 @@ body::after {
   .container { padding: 16px 12px 40px; }
   .header { padding: 30px 12px 20px; }
   .header h1 { font-size: 1.4rem; }
-  .lang-toggle { top: 12px; right: 12px; padding: 5px 12px; font-size: 0.78rem; }
+  .top-controls { top: 10px; right: 12px; gap: 6px; }
+  .top-btn { padding: 5px 10px; font-size: 0.74rem; }
   .search-box { padding: 12px 16px; }
   .filters { gap: 10px; }
   .filter-group { flex: 1 1 140px; min-width: 120px; }
@@ -432,10 +495,32 @@ body::after {
 <div class="container">
   <!-- Header -->
   <div class="header">
-    <button class="lang-toggle" id="langToggle" onclick="toggleLang()">
-      <span class="globe">&#x1F310;</span>
-      <span id="langLabel">EN</span>
-    </button>
+    <div class="top-controls">
+      <div class="font-selector" id="fontSelector">
+        <button class="top-btn" onclick="toggleFontDropdown()">
+          <span class="icon">&#x1D5A0;</span>
+          <span id="fontLabel">HarmonyOS</span>
+        </button>
+        <div class="font-dropdown" id="fontDropdown">
+          <button class="font-option active" data-font="harmonyos" onclick="setFont('harmonyos')">
+            <span class="font-name">HarmonyOS Sans SC</span>
+            <span class="font-desc">现代几何，笔画清晰锐利</span>
+          </button>
+          <button class="font-option" data-font="noto" onclick="setFont('noto')">
+            <span class="font-name">Noto Sans SC</span>
+            <span class="font-desc">思源黑体，中性清晰</span>
+          </button>
+          <button class="font-option" data-font="lxgw" onclick="setFont('lxgw')">
+            <span class="font-name">LXGW WenKai</span>
+            <span class="font-desc">霞鹜文楷，温润文艺</span>
+          </button>
+        </div>
+      </div>
+      <button class="top-btn" onclick="toggleLang()">
+        <span class="icon">&#x1F310;</span>
+        <span id="langLabel">EN</span>
+      </button>
+    </div>
     <h1 id="title">北京大学 2026春季课程搜索</h1>
     <p class="subtitle" id="subtitle">搜索本科生与研究生课程</p>
   </div>
@@ -567,6 +652,39 @@ const i18n = {
 };
 
 let currentLang = 'zh';
+
+/* ===== Font Selector ===== */
+const FONTS = {
+  harmonyos: { family: '"HarmonyOS Sans SC"', label: 'HarmonyOS' },
+  noto:      { family: '"Noto Sans SC"',      label: 'Noto Sans' },
+  lxgw:      { family: '"LXGW WenKai"',       label: 'LXGW WenKai' },
+};
+const FALLBACK = ', -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Hiragino Sans GB", sans-serif';
+let currentFont = 'harmonyos';
+
+function setFont(key) {
+  currentFont = key;
+  document.body.style.fontFamily = FONTS[key].family + FALLBACK;
+  document.getElementById('fontLabel').textContent = FONTS[key].label;
+  document.querySelectorAll('.font-option').forEach(el => {
+    el.classList.toggle('active', el.dataset.font === key);
+  });
+  closeFontDropdown();
+}
+
+function toggleFontDropdown() {
+  document.getElementById('fontDropdown').classList.toggle('open');
+}
+
+function closeFontDropdown() {
+  document.getElementById('fontDropdown').classList.remove('open');
+}
+
+document.addEventListener('click', e => {
+  if (!document.getElementById('fontSelector').contains(e.target)) {
+    closeFontDropdown();
+  }
+});
 
 function toggleLang() {
   currentLang = currentLang === 'zh' ? 'en' : 'zh';
