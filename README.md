@@ -1,4 +1,8 @@
-# Pinhaoke - 北京大学课程搜索
+
+## 使用方法
+直接打开网页：即可使用
+
+# 拼好课 - 北京大学课程搜索
 
 北京大学 2026 年春季学期课程搜索工具，支持本科生与研究生全部课程的快速检索与筛选。
 
@@ -14,21 +18,11 @@
 - `pku_undergraduate_course_schedule_spring_2026.xlsx` — 本科生课程表（37 个类别，2833 门课）
 - `pku_graduate_course_schedule_spring_2026.xlsx` — 研究生课程表（42 个类别，1377 门课）
 
-## 使用方法
+## 呜呜呜希望有能力的人稍微赞助一下 弥补网站的运行费用 只要自己还在学校读书 每学期都会一直更新下去的！
 
-1. 运行数据解析脚本生成课程数据：
 
-```bash
-python3 build_data.py
-```
 
-2. 用浏览器打开 `index.html` 即可使用。
 
-## 项目结构
+## 如果有反馈BUG、意见等或者希望有新的功能，欢迎联系！一定会尽快安排。
 
-```
-build_data.py    # Excel → JSON 解析脚本
-courses_data.js  # 生成的课程数据（JS 格式）
-courses.json     # 生成的课程数据（JSON 格式）
-index.html       # 搜索页面（单文件 SPA）
-```
+![微信联系方式](Images/MyWeChat.jpg)
