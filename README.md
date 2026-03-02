@@ -21,7 +21,7 @@
 - `pku_graduate_course_schedule_spring_2026.xlsx` — 研究生课程表（42 个类别，1377 门课）
 
 ## 如果有能力的话欢迎赞助 弥补网站的运行费用 
-## 只要自己还在学校读书 每学期都会一直更新下去的！
+## 只要有人需要 每学期都会一直更新下去的！
 
 <table align="center"><tr>
 <td align="center"><img src="Images/wechat_sponsor.jpg" alt="微信赞助" width="150"><br>支付宝赞助码</td>
@@ -31,3 +31,7 @@
 
 ## 如果想要反馈BUG,或者希望有新的功能意见,欢迎微信联系,一定会尽快安排!
 <p align="center"><img src="Images/MyWeChat.jpg" alt="微信联系方式" width="200"></p>
+
+
+### 鸣谢
+感谢西米露老师提供的课程列表
