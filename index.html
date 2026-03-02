@@ -9,44 +9,63 @@
 *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
 :root {
-  --bg: #e0e5ec;
-  --text: #44495a;
-  --text-light: #6b7280;
-  --text-lighter: #9ca3af;
-  --accent: #6875f5;
-  --accent-soft: #818cf8;
-  --shadow-dark: #b8bec7;
-  --shadow-light: #ffffff;
-  --radius: 16px;
-  --radius-sm: 10px;
+  --glass-bg: rgba(255, 255, 255, 0.45);
+  --glass-bg-strong: rgba(255, 255, 255, 0.6);
+  --glass-border: rgba(255, 255, 255, 0.5);
+  --glass-border-light: rgba(255, 255, 255, 0.35);
+  --glass-shadow: rgba(31, 38, 135, 0.1);
+  --blur: 16px;
+  --blur-strong: 22px;
+  --text: #1e293b;
+  --text-light: #475569;
+  --text-lighter: #94a3b8;
+  --accent: #6366f1;
+  --accent-light: #818cf8;
+  --green: #059669;
+  --green-bg: rgba(5, 150, 105, 0.1);
+  --indigo-bg: rgba(99, 102, 241, 0.1);
+  --radius: 18px;
+  --radius-sm: 12px;
   --radius-pill: 50px;
 }
 
 body {
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Noto Sans SC", "PingFang SC", "Hiragino Sans GB", sans-serif;
-  background: var(--bg);
   color: var(--text);
   line-height: 1.6;
   min-height: 100vh;
+  background: linear-gradient(135deg, #e0e7ff 0%, #dbeafe 25%, #e0f2fe 50%, #ede9fe 75%, #fae8ff 100%);
+  background-attachment: fixed;
 }
 
-/* ===== Neumorphism Mixins ===== */
-.neu-raised {
-  background: var(--bg);
-  border-radius: var(--radius);
-  box-shadow: 6px 6px 12px var(--shadow-dark), -6px -6px 12px var(--shadow-light);
+/* Decorative background blobs */
+body::before,
+body::after {
+  content: '';
+  position: fixed;
+  border-radius: 50%;
+  z-index: -1;
+  filter: blur(80px);
+  opacity: 0.5;
+}
+body::before {
+  width: 500px; height: 500px;
+  top: -100px; right: -100px;
+  background: radial-gradient(circle, #c7d2fe, #a5b4fc, transparent 70%);
+}
+body::after {
+  width: 600px; height: 600px;
+  bottom: -150px; left: -150px;
+  background: radial-gradient(circle, #bae6fd, #93c5fd, transparent 70%);
 }
 
-.neu-inset {
-  background: var(--bg);
-  border-radius: var(--radius);
-  box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
-}
-
-.neu-flat {
-  background: var(--bg);
-  border-radius: var(--radius);
-  box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+/* ===== Glass Mixin ===== */
+.glass {
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px var(--glass-shadow);
 }
 
 /* ===== Layout ===== */
@@ -59,21 +78,26 @@ body {
 /* ===== Header ===== */
 .header {
   text-align: center;
-  padding: 40px 20px 30px;
+  padding: 44px 20px 32px;
   position: relative;
 }
 
 .header h1 {
-  font-size: 1.75rem;
+  font-size: 1.8rem;
   font-weight: 700;
   color: var(--text);
-  letter-spacing: 0.5px;
+  letter-spacing: 0.3px;
+  background: linear-gradient(135deg, #4f46e5, #6366f1, #7c3aed);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .header .subtitle {
   font-size: 0.9rem;
   color: var(--text-light);
-  margin-top: 6px;
+  margin-top: 8px;
+  font-weight: 400;
 }
 
 /* ===== Language Toggle ===== */
@@ -83,26 +107,30 @@ body {
   right: 20px;
   display: flex;
   align-items: center;
-  gap: 8px;
-  padding: 6px 16px;
+  gap: 6px;
+  padding: 7px 16px;
   border-radius: var(--radius-pill);
-  box-shadow: 3px 3px 6px var(--shadow-dark), -3px -3px 6px var(--shadow-light);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 4px 16px var(--glass-shadow);
   cursor: pointer;
   font-size: 0.82rem;
   color: var(--text-light);
-  background: var(--bg);
-  border: none;
-  transition: box-shadow 0.2s;
+  font-family: inherit;
+  transition: all 0.25s;
   user-select: none;
 }
 
-.lang-toggle:active {
-  box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+.lang-toggle:hover {
+  background: var(--glass-bg-strong);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.15);
 }
 
-.lang-toggle .globe {
-  font-size: 1rem;
-}
+.lang-toggle:active { transform: scale(0.96); }
+
+.lang-toggle .globe { font-size: 1rem; }
 
 /* ===== Search Bar ===== */
 .search-section {
@@ -112,10 +140,20 @@ body {
 .search-box {
   display: flex;
   align-items: center;
-  padding: 14px 20px;
+  padding: 14px 22px;
   border-radius: var(--radius-pill);
-  box-shadow: inset 3px 3px 7px var(--shadow-dark), inset -3px -3px 7px var(--shadow-light);
+  background: var(--glass-bg-strong);
+  backdrop-filter: blur(var(--blur-strong));
+  -webkit-backdrop-filter: blur(var(--blur-strong));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px var(--glass-shadow);
   gap: 12px;
+  transition: all 0.3s;
+}
+
+.search-box:focus-within {
+  border-color: var(--accent-light);
+  box-shadow: 0 8px 32px var(--glass-shadow), 0 0 0 3px rgba(99, 102, 241, 0.12);
 }
 
 .search-box .search-icon {
@@ -153,11 +191,11 @@ body {
 
 .filter-group label {
   display: block;
-  font-size: 0.78rem;
+  font-size: 0.75rem;
   font-weight: 600;
   color: var(--text-light);
   margin-bottom: 6px;
-  padding-left: 8px;
+  padding-left: 10px;
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -166,21 +204,29 @@ body {
 .filter-group input {
   width: 100%;
   padding: 10px 14px;
-  border: none;
+  border: 1px solid var(--glass-border-light);
   outline: none;
-  background: var(--bg);
+  background: rgba(255, 255, 255, 0.5);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   border-radius: var(--radius-sm);
-  box-shadow: inset 2px 2px 5px var(--shadow-dark), inset -2px -2px 5px var(--shadow-light);
   font-size: 0.88rem;
   color: var(--text);
   font-family: inherit;
   appearance: none;
   -webkit-appearance: none;
   cursor: pointer;
+  transition: all 0.25s;
+}
+
+.filter-group select:focus,
+.filter-group input:focus {
+  border-color: var(--accent-light);
+  box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.1);
 }
 
 .filter-group select {
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%236b7280' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23475569' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
   background-repeat: no-repeat;
   background-position: right 12px center;
   padding-right: 32px;
@@ -201,21 +247,25 @@ body {
 }
 
 .clear-btn {
-  padding: 6px 16px;
-  border: none;
+  padding: 7px 18px;
+  border: 1px solid var(--glass-border-light);
   border-radius: var(--radius-pill);
-  background: var(--bg);
-  box-shadow: 2px 2px 5px var(--shadow-dark), -2px -2px 5px var(--shadow-light);
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
   font-size: 0.8rem;
   color: var(--text-light);
   cursor: pointer;
   font-family: inherit;
-  transition: box-shadow 0.2s;
+  transition: all 0.25s;
 }
 
-.clear-btn:active {
-  box-shadow: inset 2px 2px 4px var(--shadow-dark), inset -2px -2px 4px var(--shadow-light);
+.clear-btn:hover {
+  background: var(--glass-bg-strong);
+  color: var(--text);
 }
+
+.clear-btn:active { transform: scale(0.96); }
 
 /* ===== Course Cards ===== */
 .results {
@@ -227,12 +277,18 @@ body {
 .course-card {
   padding: 20px 24px;
   border-radius: var(--radius);
-  box-shadow: 5px 5px 10px var(--shadow-dark), -5px -5px 10px var(--shadow-light);
-  transition: box-shadow 0.25s;
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px var(--glass-shadow);
+  transition: all 0.3s;
 }
 
 .course-card:hover {
-  box-shadow: 7px 7px 14px var(--shadow-dark), -7px -7px 14px var(--shadow-light);
+  background: var(--glass-bg-strong);
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(31, 38, 135, 0.15);
 }
 
 .card-header {
@@ -258,17 +314,31 @@ body {
 
 .badge {
   display: inline-block;
-  padding: 3px 10px;
+  padding: 3px 11px;
   border-radius: var(--radius-pill);
   font-size: 0.72rem;
   font-weight: 600;
   white-space: nowrap;
-  box-shadow: 2px 2px 4px var(--shadow-dark), -2px -2px 4px var(--shadow-light);
+  border: 1px solid transparent;
 }
 
-.badge-undergrad { color: #6875f5; }
-.badge-grad { color: #10b981; }
-.badge-category { color: var(--text-light); }
+.badge-undergrad {
+  color: var(--accent);
+  background: var(--indigo-bg);
+  border-color: rgba(99, 102, 241, 0.2);
+}
+
+.badge-grad {
+  color: var(--green);
+  background: var(--green-bg);
+  border-color: rgba(5, 150, 105, 0.2);
+}
+
+.badge-category {
+  color: var(--text-light);
+  background: rgba(100, 116, 139, 0.08);
+  border-color: rgba(100, 116, 139, 0.15);
+}
 
 .card-details {
   display: grid;
@@ -303,26 +373,28 @@ body {
 /* ===== Load More ===== */
 .load-more {
   display: block;
-  margin: 24px auto 0;
-  padding: 12px 40px;
-  border: none;
+  margin: 28px auto 0;
+  padding: 12px 44px;
+  border: 1px solid var(--glass-border);
   border-radius: var(--radius-pill);
-  background: var(--bg);
-  box-shadow: 4px 4px 8px var(--shadow-dark), -4px -4px 8px var(--shadow-light);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  box-shadow: 0 4px 16px var(--glass-shadow);
   font-size: 0.9rem;
   color: var(--text-light);
   cursor: pointer;
   font-family: inherit;
-  transition: box-shadow 0.2s;
-}
-
-.load-more:active {
-  box-shadow: inset 3px 3px 6px var(--shadow-dark), inset -3px -3px 6px var(--shadow-light);
+  transition: all 0.25s;
 }
 
 .load-more:hover {
-  color: var(--text);
+  background: var(--glass-bg-strong);
+  color: var(--accent);
+  box-shadow: 0 6px 24px rgba(99, 102, 241, 0.12);
 }
+
+.load-more:active { transform: scale(0.97); }
 
 /* ===== Empty / Loading States ===== */
 .state-msg {
@@ -342,7 +414,7 @@ body {
 @media (max-width: 640px) {
   .container { padding: 16px 12px 40px; }
   .header { padding: 30px 12px 20px; }
-  .header h1 { font-size: 1.35rem; }
+  .header h1 { font-size: 1.4rem; }
   .lang-toggle { top: 12px; right: 12px; padding: 5px 12px; font-size: 0.78rem; }
   .search-box { padding: 12px 16px; }
   .filters { gap: 10px; }
@@ -370,7 +442,7 @@ body {
   <div class="search-section">
     <div class="search-box">
       <span class="search-icon">&#x1F50D;</span>
-      <input type="text" id="searchInput" data-i18n-placeholder="searchPlaceholder" placeholder="输入课程名或教师姓名..." oninput="debouncedSearch()">
+      <input type="text" id="searchInput" placeholder="输入课程名或教师姓名..." oninput="debouncedSearch()">
     </div>
   </div>
 
@@ -411,7 +483,7 @@ body {
     </div>
     <div class="filter-group">
       <label id="labelClassroom">教室</label>
-      <input type="text" id="filterClassroom" data-i18n-placeholder="classroomPlaceholder" placeholder="输入教室名称..." oninput="debouncedSearch()">
+      <input type="text" id="filterClassroom" placeholder="输入教室名称..." oninput="debouncedSearch()">
     </div>
   </div>
 
@@ -500,10 +572,6 @@ function toggleLang() {
   renderResults();
 }
 
-function t(key) {
-  return i18n[currentLang][key] || key;
-}
-
 function applyI18n() {
   const lang = i18n[currentLang];
   document.getElementById('title').textContent = lang.title;
@@ -520,34 +588,23 @@ function applyI18n() {
   document.getElementById('loadMoreText').textContent = lang.loadMoreText;
   document.documentElement.lang = currentLang === 'zh' ? 'zh-CN' : 'en';
 
-  // Update student type dropdown
   const stSelect = document.getElementById('filterStudentType');
-  const stVal = stSelect.value;
   stSelect.options[0].textContent = lang.all;
   stSelect.options[1].textContent = lang.undergrad;
   stSelect.options[2].textContent = lang.grad;
-  // Keep internal values as Chinese for matching
   stSelect.options[1].value = '本科生';
   stSelect.options[2].value = '研究生';
 
-  // Update weekday dropdown
   const wdSelect = document.getElementById('filterWeekday');
-  const wdVal = wdSelect.value;
   const weekdaysCN = ['周一', '周二', '周三', '周四', '周五', '周六', '周日'];
   wdSelect.options[0].textContent = lang.all;
   for (let i = 0; i < 7; i++) {
     wdSelect.options[i + 1].textContent = lang.weekdays[i];
-    wdSelect.options[i + 1].value = weekdaysCN[i]; // Keep CN value for matching
+    wdSelect.options[i + 1].value = weekdaysCN[i];
   }
 
-  // Update category dropdown display
-  const catSelect = document.getElementById('filterCategory');
-  catSelect.options[0].textContent = lang.all;
-
-  // Update department dropdown display
-  const deptSelect = document.getElementById('filterDepartment');
-  deptSelect.options[0].textContent = lang.all;
-
+  document.getElementById('filterCategory').options[0].textContent = lang.all;
+  document.getElementById('filterDepartment').options[0].textContent = lang.all;
   updateResultsCount();
 }
 
@@ -640,39 +697,26 @@ function renderResults() {
   }
 
   const end = Math.min(displayedCount + PAGE_SIZE, filteredCourses.length);
-  const isFirstRender = displayedCount === 0;
-
-  if (isFirstRender) {
-    container.innerHTML = '';
-  }
+  if (displayedCount === 0) container.innerHTML = '';
 
   const fragment = document.createDocumentFragment();
   for (let i = displayedCount; i < end; i++) {
     fragment.appendChild(createCard(filteredCourses[i]));
   }
-
-  if (isFirstRender) {
-    container.appendChild(fragment);
-  } else {
-    container.appendChild(fragment);
-  }
+  container.appendChild(fragment);
 
   displayedCount = end;
   document.getElementById('loadMoreBtn').style.display =
     displayedCount < filteredCourses.length ? 'block' : 'none';
-
   updateResultsCount();
 }
 
-function loadMore() {
-  renderResults();
-}
+function loadMore() { renderResults(); }
 
 function updateResultsCount() {
   const shown = Math.min(displayedCount, filteredCourses.length);
-  const total = filteredCourses.length;
-  const fn = i18n[currentLang].resultsCount;
-  document.getElementById('resultsCount').textContent = fn(shown, total);
+  document.getElementById('resultsCount').textContent =
+    i18n[currentLang].resultsCount(shown, filteredCourses.length);
 }
 
 function createCard(course) {
@@ -709,7 +753,6 @@ function createCard(course) {
         <span class="detail-value">${esc(course['上课时间'])}</span>
       </div>`;
   }
-
   if (course['教室']) {
     html += `
       <div class="detail-item">
@@ -717,7 +760,6 @@ function createCard(course) {
         <span class="detail-value">${esc(course['教室'])}</span>
       </div>`;
   }
-
   if (course['备注']) {
     html += `
       <div class="detail-item" style="grid-column: 1 / -1;">
@@ -733,9 +775,9 @@ function createCard(course) {
 
 function esc(str) {
   if (!str) return '';
-  const div = document.createElement('div');
-  div.textContent = str;
-  return div.innerHTML;
+  const d = document.createElement('div');
+  d.textContent = str;
+  return d.innerHTML;
 }
 
 function clearAll() {
