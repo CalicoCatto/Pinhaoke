@@ -26,4 +26,4 @@
 
 
 ## 如果有反馈BUG、意见等或者希望有新的功能，欢迎联系！一定会尽快安排。
-<img src="Images/MyWeChat.jpg" alt="微信联系方式" width="300">
+<p align="center"><img src="Images/MyWeChat.jpg" alt="微信联系方式" width="300"></p>
