@@ -300,10 +300,11 @@ body::after {
   padding: 10px 14px;
   border: 1px solid var(--glass-border-light);
   outline: none;
-  background: rgba(255, 255, 255, 0.5);
-  backdrop-filter: blur(10px);
-  -webkit-backdrop-filter: blur(10px);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
   border-radius: var(--radius-sm);
+  box-shadow: 0 4px 16px var(--glass-shadow);
   font-size: 0.88rem;
   color: var(--text);
   font-family: inherit;
@@ -311,6 +312,14 @@ body::after {
   -webkit-appearance: none;
   cursor: pointer;
   transition: all 0.25s;
+}
+
+.filter-group select option {
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  color: var(--text);
+  padding: 8px 12px;
 }
 
 .filter-group select:focus,
@@ -485,23 +494,28 @@ body::after {
 }
 
 .detail-btn {
-  padding: 6px 16px;
-  border: 1px solid var(--glass-border-light);
+  padding: 10px 28px;
+  border: 1px solid rgba(99, 102, 241, 0.3);
   border-radius: var(--radius-pill);
-  background: rgba(99, 102, 241, 0.06);
-  font-size: 0.78rem;
+  background: var(--indigo-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  font-size: 0.9rem;
+  font-weight: 700;
   color: var(--accent);
   cursor: pointer;
   font-family: inherit;
   transition: all 0.25s;
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.1);
 }
 
 .detail-btn:hover {
-  background: var(--indigo-bg);
-  box-shadow: 0 2px 8px rgba(99, 102, 241, 0.15);
+  background: rgba(99, 102, 241, 0.18);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.2);
+  transform: translateY(-1px);
 }
 
-.detail-btn:active { transform: scale(0.96); }
+.detail-btn:active { transform: scale(0.97); }
 
 /* ===== Modal ===== */
 .modal-overlay {
@@ -701,6 +715,48 @@ body::after {
   font-size: 0.9rem;
 }
 
+/* ===== Footer ===== */
+.site-footer {
+  margin-top: 60px;
+  padding: 32px 24px;
+  border-radius: var(--radius);
+  background: var(--glass-bg);
+  backdrop-filter: blur(var(--blur));
+  -webkit-backdrop-filter: blur(var(--blur));
+  border: 1px solid var(--glass-border);
+  box-shadow: 0 8px 32px var(--glass-shadow);
+  text-align: center;
+}
+
+.footer-info {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 24px;
+  margin-bottom: 16px;
+}
+
+.footer-item {
+  font-size: 0.85rem;
+  color: var(--text-light);
+}
+
+.footer-item strong {
+  color: var(--accent);
+  font-weight: 600;
+}
+
+.footer-names {
+  color: var(--text);
+  font-weight: 500;
+}
+
+.footer-msg {
+  font-size: 0.84rem;
+  color: var(--text-lighter);
+  line-height: 1.8;
+}
+
 /* ===== Responsive ===== */
 @media (max-width: 640px) {
   .container { padding: 16px 12px 40px; }
@@ -733,9 +789,9 @@ body::after {
   }
   .filter-group select,
   .filter-group input {
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    background: rgba(255, 255, 255, 0.7);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    background: rgba(255, 255, 255, 0.65);
   }
   .clear-btn {
     backdrop-filter: none;
@@ -847,6 +903,15 @@ body::after {
   <button class="load-more" id="loadMoreBtn" onclick="loadMore()" style="display:none;">
     <span id="loadMoreText">加载更多</span>
   </button>
+
+  <!-- Footer -->
+  <div class="site-footer">
+    <div class="footer-info">
+      <div class="footer-item"><strong>项目维护</strong> <span class="footer-names">祈愿的猫</span></div>
+      <div class="footer-item"><strong>鸣谢</strong> <span class="footer-names">学生爱心社 &middot; 西米露老师 &middot; 奥利奥老师</span></div>
+    </div>
+    <div class="footer-msg">欢迎大家把网站分享给其他好朋友们！会一直更新下去为大家服务的~</div>
+  </div>
 </div>
 
 <!-- Detail Modal -->
@@ -1359,20 +1424,6 @@ function createCard(course) {
       <div class="detail-item">
         <span class="detail-label">${esc(lang.fieldClassroom)}</span>
         <span class="detail-value">${esc(course.classroom)}</span>
-      </div>`;
-  }
-  if (course.enrollment) {
-    html += `
-      <div class="detail-item">
-        <span class="detail-label">${esc(lang.fieldEnrollment)}</span>
-        <span class="detail-value">${esc(course.enrollment)}</span>
-      </div>`;
-  }
-  if (course.notes) {
-    html += `
-      <div class="detail-item" style="grid-column: 1 / -1;">
-        <span class="detail-label">${esc(lang.fieldNotes)}</span>
-        <span class="detail-value notes">${esc(course.notes)}</span>
       </div>`;
   }
 
