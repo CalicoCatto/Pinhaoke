@@ -1372,16 +1372,20 @@ async function init() {
 /* ===== Custom Select Component ===== */
 const csValues = {}; // track selected values: { filterId: value }
 
-function initCustomSelect(containerId, options, allText) {
+function initCustomSelect(containerId, options, allText, defaultValue) {
   const container = document.getElementById(containerId);
   const filterId = container.dataset.filter;
-  csValues[filterId] = '';
+  csValues[filterId] = defaultValue || '';
 
-  let html = `<div class="custom-select-trigger">${esc(allText)}</div>`;
+  const defaultOpt = defaultValue ? options.find(o => o.value === defaultValue) : null;
+  const triggerText = defaultOpt ? defaultOpt.label : allText;
+
+  let html = `<div class="custom-select-trigger">${esc(triggerText)}</div>`;
   html += `<div class="custom-select-dropdown">`;
-  html += `<div class="custom-select-option active" data-value="">${esc(allText)}</div>`;
+  html += `<div class="custom-select-option${!defaultValue ? ' active' : ''}" data-value="">${esc(allText)}</div>`;
   for (const opt of options) {
-    html += `<div class="custom-select-option" data-value="${esc(opt.value)}">${esc(opt.label)}</div>`;
+    const isActive = defaultValue === opt.value ? ' active' : '';
+    html += `<div class="custom-select-option${isActive}" data-value="${esc(opt.value)}">${esc(opt.label)}</div>`;
   }
   html += `</div>`;
   container.innerHTML = html;
@@ -1438,7 +1442,7 @@ function populateFilters(filters) {
   initCustomSelect('csSort', [
     { value: 'pinyin', label: lang.sortPinyin },
     { value: 'likes', label: lang.sortLikes },
-  ], lang.sortDefault);
+  ], lang.sortDefault, 'likes');
 
   initCustomSelect('csGrading',
     filters.gradings.map(g => ({ value: g, label: g })),
