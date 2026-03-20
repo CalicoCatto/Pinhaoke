@@ -61,6 +61,7 @@ def list_courses(
     department: str = Query("", description="Department filter"),
     weekday: str = Query("", description="Weekday filter"),
     grading: str = Query("", description="Grading filter"),
+    sort: str = Query("", description="Sort: pinyin, likes"),
     page: int = Query(1, ge=1),
     page_size: int = Query(50, ge=1, le=200),
 ):
@@ -101,6 +102,12 @@ def list_courses(
     where = " WHERE " + " AND ".join(conditions) if conditions else ""
     offset = (page - 1) * page_size
 
+    sort_map = {
+        "pinyin": "c.course_name COLLATE NOCASE",
+        "likes": "COALESCE(l.like_count, 0) DESC, c.id",
+    }
+    order_by = sort_map.get(sort, "c.id")
+
     with get_db() as conn:
         cur = conn.cursor()
 
@@ -121,7 +128,7 @@ def list_courses(
                 LEFT JOIN course_details d ON c.id = d.course_id
                 LEFT JOIN course_likes l ON c.id = l.course_id
                 {where}
-                ORDER BY c.id
+                ORDER BY {order_by}
                 LIMIT ? OFFSET ?""",
             params + [page_size, offset],
         ).fetchall()

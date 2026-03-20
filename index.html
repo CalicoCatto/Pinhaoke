@@ -408,31 +408,32 @@ body::after {
 .like-btn {
   display: flex;
   align-items: center;
-  gap: 5px;
-  padding: 10px 20px;
-  border: 1px solid var(--glass-border-light);
+  gap: 6px;
+  padding: 10px 22px;
+  border: 1px solid rgba(236, 72, 153, 0.3);
   border-radius: var(--radius-pill);
-  background: var(--glass-bg);
+  background: rgba(236, 72, 153, 0.08);
   backdrop-filter: blur(var(--blur));
   -webkit-backdrop-filter: blur(var(--blur));
-  font-size: 0.88rem;
-  color: var(--text-light);
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #ec4899;
   cursor: pointer;
   font-family: inherit;
   transition: all 0.25s;
-  box-shadow: 0 4px 12px var(--glass-shadow);
+  box-shadow: 0 4px 12px rgba(236, 72, 153, 0.1);
 }
 
 .like-btn:hover {
-  background: rgba(239, 68, 68, 0.06);
-  border-color: rgba(239, 68, 68, 0.25);
-  color: #ef4444;
+  background: rgba(236, 72, 153, 0.15);
+  box-shadow: 0 6px 20px rgba(236, 72, 153, 0.2);
+  transform: translateY(-1px);
 }
 
 .like-btn.liked {
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.08);
-  border-color: rgba(239, 68, 68, 0.3);
+  color: #db2777;
+  background: rgba(236, 72, 153, 0.18);
+  border-color: rgba(219, 39, 119, 0.4);
 }
 
 .like-btn .heart {
@@ -445,7 +446,7 @@ body::after {
 }
 
 .like-btn .like-count {
-  font-weight: 600;
+  font-weight: 700;
   font-size: 0.84rem;
   min-width: 1ch;
 }
@@ -983,8 +984,12 @@ body::after {
         <div class="custom-select" id="csDepartment" data-filter="filterDepartment"></div>
       </div>
     </div>
-    <!-- Row 2: 成绩记载方式, 上课时间, 教室 -->
+    <!-- Row 2: 排序, 成绩记载方式, 上课时间, 教室 -->
     <div class="filter-row">
+      <div class="filter-group">
+        <label id="labelSort">排序</label>
+        <div class="custom-select" id="csSort" data-filter="filterSort"></div>
+      </div>
       <div class="filter-group">
         <label id="labelGrading">成绩记载方式</label>
         <div class="custom-select" id="csGrading" data-filter="filterGrading"></div>
@@ -1023,7 +1028,7 @@ body::after {
   <div class="site-footer">
     <div class="footer-info">
       <div class="footer-item"><strong>项目维护</strong> <span class="footer-names">祈愿的猫</span></div>
-      <div class="footer-item"><strong>鸣谢</strong> <span class="footer-names">学生爱心社 &middot; 西米露老师 &middot; 奥利奥老师</span></div>
+      <div class="footer-item"><strong>鸣谢</strong> <span class="footer-names">学生爱心社: 西米露老师 奥利奥老师</span></div>
     </div>
     <div class="footer-msg">欢迎大家把网站分享给其他好朋友们！会一直更新下去为大家服务的~</div>
   </div>
@@ -1044,7 +1049,8 @@ const i18n = {
     searchPlaceholder: '输入课程名、教师姓名或教室...',
     labelCourseType: '课程类型', labelCategory: '课程类别',
     labelCredits: '学分', labelDepartment: '开课单位',
-    labelGrading: '成绩记载方式',
+    labelGrading: '成绩记载方式', labelSort: '排序',
+    sortDefault: '默认', sortPinyin: '课程名拼音', sortLikes: '爱心数',
     labelWeekday: '上课时间', labelClassroom: '教室',
     classroomPlaceholder: '输入教室名称...',
     clearBtn: '清除筛选', loadMoreText: '加载更多',
@@ -1074,7 +1080,8 @@ const i18n = {
     searchPlaceholder: 'Search course name, teacher or classroom...',
     labelCourseType: 'Course Type', labelCategory: 'Category',
     labelCredits: 'Credits', labelDepartment: 'Department',
-    labelGrading: 'Grading',
+    labelGrading: 'Grading', labelSort: 'Sort',
+    sortDefault: 'Default', sortPinyin: 'Name (A-Z)', sortLikes: 'Most Liked',
     labelWeekday: 'Schedule', labelClassroom: 'Classroom',
     classroomPlaceholder: 'Enter classroom name...',
     clearBtn: 'Clear Filters', loadMoreText: 'Load More',
@@ -1104,7 +1111,8 @@ const i18n = {
     searchPlaceholder: '授業名、教員名または教室を入力...',
     labelCourseType: '科目種別', labelCategory: '科目区分',
     labelCredits: '単位', labelDepartment: '開講部局',
-    labelGrading: '成績評価方法',
+    labelGrading: '成績評価方法', labelSort: '並び替え',
+    sortDefault: 'デフォルト', sortPinyin: '名前順', sortLikes: '人気順',
     labelWeekday: '曜日', labelClassroom: '教室',
     classroomPlaceholder: '教室名を入力...',
     clearBtn: 'クリア', loadMoreText: 'もっと見る',
@@ -1134,7 +1142,8 @@ const i18n = {
     searchPlaceholder: '강좌명, 교수명 또는 강의실 입력...',
     labelCourseType: '강좌 유형', labelCategory: '강좌 분류',
     labelCredits: '학점', labelDepartment: '개설 학과',
-    labelGrading: '성적 방식',
+    labelGrading: '성적 방식', labelSort: '정렬',
+    sortDefault: '기본', sortPinyin: '이름순', sortLikes: '인기순',
     labelWeekday: '요일', labelClassroom: '강의실',
     classroomPlaceholder: '강의실명 입력...',
     clearBtn: '초기화', loadMoreText: '더 보기',
@@ -1164,7 +1173,8 @@ const i18n = {
     searchPlaceholder: 'Nom du cours, enseignant ou salle...',
     labelCourseType: 'Type', labelCategory: 'Cat\u00e9gorie',
     labelCredits: 'Cr\u00e9dits', labelDepartment: 'D\u00e9partement',
-    labelGrading: 'Notation',
+    labelGrading: 'Notation', labelSort: 'Trier',
+    sortDefault: 'Par d\u00e9faut', sortPinyin: 'Nom (A-Z)', sortLikes: 'Populaire',
     labelWeekday: 'Jour', labelClassroom: 'Salle',
     classroomPlaceholder: 'Nom de la salle...',
     clearBtn: 'R\u00e9initialiser', loadMoreText: 'Voir plus',
@@ -1194,7 +1204,8 @@ const i18n = {
     searchPlaceholder: 'Kursname, Dozent oder Raum...',
     labelCourseType: 'Kurstyp', labelCategory: 'Kategorie',
     labelCredits: 'Credits', labelDepartment: 'Fakult\u00e4t',
-    labelGrading: 'Bewertung',
+    labelGrading: 'Bewertung', labelSort: 'Sortieren',
+    sortDefault: 'Standard', sortPinyin: 'Name (A-Z)', sortLikes: 'Beliebt',
     labelWeekday: 'Wochentag', labelClassroom: 'Raum',
     classroomPlaceholder: 'Raumname eingeben...',
     clearBtn: 'Zur\u00fccksetzen', loadMoreText: 'Mehr laden',
@@ -1224,7 +1235,8 @@ const i18n = {
     searchPlaceholder: 'Nombre del curso, profesor o aula...',
     labelCourseType: 'Tipo', labelCategory: 'Categor\u00eda',
     labelCredits: 'Cr\u00e9ditos', labelDepartment: 'Departamento',
-    labelGrading: 'Calificaci\u00f3n',
+    labelGrading: 'Calificaci\u00f3n', labelSort: 'Ordenar',
+    sortDefault: 'Por defecto', sortPinyin: 'Nombre (A-Z)', sortLikes: 'Popular',
     labelWeekday: 'D\u00eda', labelClassroom: 'Aula',
     classroomPlaceholder: 'Nombre del aula...',
     clearBtn: 'Limpiar', loadMoreText: 'Cargar m\u00e1s',
@@ -1254,7 +1266,8 @@ const i18n = {
     searchPlaceholder: 'Название курса, преподаватель или аудитория...',
     labelCourseType: 'Тип курса', labelCategory: 'Категория',
     labelCredits: 'Кредиты', labelDepartment: 'Факультет',
-    labelGrading: 'Оценивание',
+    labelGrading: 'Оценивание', labelSort: 'Сортировка',
+    sortDefault: 'По умолчанию', sortPinyin: 'По имени', sortLikes: 'Популярные',
     labelWeekday: 'День', labelClassroom: 'Аудитория',
     classroomPlaceholder: 'Название аудитории...',
     clearBtn: 'Сбросить', loadMoreText: 'Загрузить ещё',
@@ -1316,6 +1329,7 @@ function applyI18n() {
   document.getElementById('labelCredits').textContent = lang.labelCredits;
   document.getElementById('labelDepartment').textContent = lang.labelDepartment;
   document.getElementById('labelGrading').textContent = lang.labelGrading;
+  document.getElementById('labelSort').textContent = lang.labelSort;
   document.getElementById('labelWeekday').textContent = lang.labelWeekday;
   document.getElementById('labelClassroom').textContent = lang.labelClassroom;
   document.getElementById('filterClassroom').placeholder = lang.classroomPlaceholder;
@@ -1412,6 +1426,11 @@ function populateFilters(filters) {
     filters.departments.map(d => ({ value: d, label: d })),
     lang.all);
 
+  initCustomSelect('csSort', [
+    { value: 'pinyin', label: lang.sortPinyin },
+    { value: 'likes', label: lang.sortLikes },
+  ], lang.sortDefault);
+
   initCustomSelect('csGrading',
     filters.gradings.map(g => ({ value: g, label: g })),
     lang.all);
@@ -1447,6 +1466,7 @@ async function fetchCourses() {
   const department = csValues.filterDepartment || '';
   const weekday = csValues.filterWeekday || '';
   const grading = csValues.filterGrading || '';
+  const sort = csValues.filterSort || '';
 
   const searchTerms = [q, classroom].filter(Boolean).join(' ');
   if (searchTerms) params.set('q', searchTerms);
@@ -1456,6 +1476,7 @@ async function fetchCourses() {
   if (department) params.set('department', department);
   if (weekday) params.set('weekday', weekday);
   if (grading) params.set('grading', grading);
+  if (sort) params.set('sort', sort);
   params.set('page', currentPage);
   params.set('page_size', PAGE_SIZE);
 
